@@ -171,7 +171,7 @@ class Ruteo(object):
                     break
     
     
-    def generar_vecino(self, prob=1):
+    def get_vecino(self, prob=1):
         """
         Realiza una modificación en la instancia de la solución, creando una nueva solución similar y válida de ruteo.
         
