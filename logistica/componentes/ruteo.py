@@ -19,8 +19,8 @@ class Ruteo(object):
         self.presupuesto = presupuesto
         
         # Uso el random state para determinar la generación de solución inicial.
-        self.random_state = random_state
-        random.seed(self.random_state)
+        # self.random_state = random_state
+        # random.seed(self.random_state)
         
     def _load_camiones(self, df_camiones):
         """
