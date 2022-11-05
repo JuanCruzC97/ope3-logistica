@@ -1,6 +1,6 @@
 import random
-from .camion import Camion
-from .pedido import Pedido
+from componentes import Camion
+from componentes import Pedido
 
 class Ruteo(object):
     """ 

@@ -9,7 +9,7 @@ def preparar_df_pedidos(df_pedidos, pedido):
         pedido (str): Nombre de columna de df_pedidos con el pedido que queremos rutear.
 
     Returns:
-        pd.DataFrame: _description_
+        pd.DataFrame: Dataframe de pedidos preparado para el ruteo.
     """
     df_pedido = (df_pedidos
                  [["cliente", pedido, "coord_x", "coord_y"]]
