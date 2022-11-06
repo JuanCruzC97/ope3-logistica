@@ -1,6 +1,6 @@
 import random
-from componentes import Camion
-from componentes import Pedido
+from .componentes import Camion
+from .componentes import Pedido
 
 class Ruteo(object):
     """ 
@@ -12,7 +12,7 @@ class Ruteo(object):
         - random_state: Permite definir la semilla para la generación de valores aleatorios.
     """
     
-    def __init__(self, df_camiones, df_pedidos, costo_oportunidad, presupuesto, random_state):
+    def __init__(self, df_camiones, df_pedidos, costo_oportunidad, presupuesto):
         self.camiones = self._load_camiones(df_camiones)
         self.pedidos = self._load_pedidos(df_pedidos)
         self.costo_oportunidad = costo_oportunidad
@@ -57,6 +57,12 @@ class Ruteo(object):
         """
         dict_pedidos = {row.cliente:Pedido(ix=row.cliente, x=row.coord_x, y=row.coord_y, carga=row.pedidos) for _, row in df_pedidos.iterrows() if row.pedidos != 0}
         return dict_pedidos
+    
+    def __str__():
+        pass
+
+    def __repr__():
+        pass
     
     def get_ix_camiones(self):
         """
@@ -115,7 +121,7 @@ class Ruteo(object):
         return len(self.pedidos)
     
         
-    def get_solucion_inicial(self, mode):
+    def get_solucion_inicial(self, mode="simple", random_state=1):
         """
         Permite generar una solución inicial, es decir, realizar una asignación inicial de pedidos en camiones.
         
@@ -129,10 +135,13 @@ class Ruteo(object):
             self._get_solucion_inicial_simple()
                     
         elif mode == "random":
-            self._get_solucion_inicial_random()     
+            self._get_solucion_inicial_random(random_state)     
             
         else:
             self._get_solucion_inicial_simple()
+            
+        # Generamos los resultados de la solución.
+        self._set_results()  
     
     # EXPLICAR Y CHEQUEAR BIEN LAS SOLUCIONES INICIALES.              
     
@@ -147,7 +156,7 @@ class Ruteo(object):
                 camion.add_pedido_checked(pedido)
                 
                 
-    def _get_solucion_inicial_random(self):
+    def _get_solucion_inicial_random(self, random_state):
         """
         Genera una solución con aleatoriedad.
             1. Mezcla los ix de pedidos de manera aleatoria.
@@ -157,6 +166,8 @@ class Ruteo(object):
             
         Prueba introducir todos los pedidos en todos los camiones en orden aleatorio.
         """
+        # Definimos la semilla.
+        random.seed(random_state)
         # Identificadores aleatorios de pedidos.
         ix_pedidos_rnd = random.sample(self.get_ix_pedidos(), self.count_pedidos())
         
@@ -299,27 +310,12 @@ class Ruteo(object):
                     self.get_camion(ix_camion_new).remove_pedido(pedido_reemplazo.ix)
                     
                     self.get_camion(ix_camion_new).add_pedido(pedido_mod)
-             
-    
-    # PARA CAMBIAR TODA ESTA PARTE
-    # GENERAR UN DATAFRAME CON TODOS LOS DATOS.
-    def _set_results(self):
-        self._set_carga_total()
-        self._set_costo_camiones()
-        self._set_costo_no_asignados()
-        self._set_costo_total()
-        self._set_costo_total_tn()
-        self._set_ahorro()
         
-    def get_results(self):
-        self._set_results()
-        print("--Resultados--")
-        print(f"Carga Total {self.carga_total} tn")
-        print(f"Costo Camiones {self.costo_camiones} $")
-        print(f"Costo Oportunidad {self.costo_no_asignados} $")
-        print(f"Costo Total {self.costo_total} $")
-        print(f"Costo Total por tn {self.costo_total_tn} $")
-        print(f"Ahorro {self.ahorro*100}%")
+        #print(f"Pedido {ix_pedido_mod} a Camion {ix_camion_new}")
+        
+        # Generamos los resultados de la solución.
+        self._set_results()    
+    
     
     def _set_carga_total(self):
         self.carga_total = sum([camion.get_carga_total() for camion in self.camiones.values()])
@@ -339,3 +335,21 @@ class Ruteo(object):
         
     def _set_ahorro(self):
         self.ahorro = round((self.costo_total_tn - self.presupuesto)/self.presupuesto, 4)
+
+    def _set_results(self):
+        self._set_carga_total()
+        self._set_costo_camiones()
+        self._set_costo_no_asignados()
+        self._set_costo_total()
+        self._set_costo_total_tn()
+        self._set_ahorro()
+        
+    def get_results(self):
+        self._set_results()
+        print("--Resultados--")
+        print(f"Carga Total {self.carga_total} tn")
+        print(f"Costo Camiones {self.costo_camiones} $")
+        print(f"Costo Oportunidad {self.costo_no_asignados} $")
+        print(f"Costo Total {self.costo_total} $")
+        print(f"Costo Total por tn {self.costo_total_tn} $")
+        print(f"Ahorro {self.ahorro*100}%")
