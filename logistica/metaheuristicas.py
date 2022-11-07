@@ -109,8 +109,10 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
     
     # Generamos el diccionario que contiene toda la información del proceso.
     solution_history = {}
-    solution_history["history_actual"] = []
-    solution_history["history_best"] = [best_solution.costo_total_tn]
+    solution_history["actual_sol"] = []
+    solution_history["new_sol"] = []
+    solution_history["best_sol"] = [best_solution.costo_total_tn]
+    solution_history["temp"] = []
     
     # Generamos una lista decreciente de temperaturas según los parámetros de la función.
     #temps = list(-np.sort(-np.arange(t_final, t_inicial+k, k)))
@@ -131,21 +133,24 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
             new_solution = copy.deepcopy(actual_solution)
             new_solution.get_vecino(prob=prob)
             
+            solution_history["actual_sol"].append(actual_solution.costo_total_tn)
+            solution_history["new_sol"].append(new_solution.costo_total_tn)
+            solution_history["temp"].append(t)
+            
             # Calculamos la diferencia de costos.
             delta =  actual_solution.costo_total_tn - new_solution.costo_total_tn
-            print(f"Temp={t}, New_Sol={new_solution.costo_total_tn}, Actual_Sol={actual_solution.costo_total_tn}, Delta={delta}, Prob={math.exp(delta/t)}")
+            #print(f"Temp={t}, New_Sol={new_solution.costo_total_tn}, Actual_Sol={actual_solution.costo_total_tn}, Delta={delta}, Prob={math.exp(delta/t)}")
             
             # Si la probabilidad es mayor a una uniforme 0-1
             if math.exp(delta/t) > random.uniform(0,1):
                 # La solución actual pasa a ser la nueva solución con mayor costo.
                 actual_solution = copy.deepcopy(new_solution)
-                solution_history["history_actual"].append(actual_solution.costo_total_tn)
             
             # Si la solución actual guardada tiene un menor costo que la mejor solución encontrada.
             if actual_solution.costo_total_tn < best_solution.costo_total_tn:
                 # Actualizamos la mejor solución encontrada.
                 best_solution = copy.deepcopy(actual_solution)
-                solution_history["history_best"].append(best_solution.costo_total_tn)
+                solution_history["best_sol"].append(best_solution.costo_total_tn)
             
     # Terminamos de medir el tiempo de ejecución y guardamos los resultados.
     end = time.time()

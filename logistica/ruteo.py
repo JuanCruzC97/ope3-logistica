@@ -1,3 +1,4 @@
+import pandas as pd
 import random
 from .componentes import Camion
 from .componentes import Pedido
@@ -58,11 +59,13 @@ class Ruteo(object):
         dict_pedidos = {row.cliente:Pedido(ix=row.cliente, x=row.coord_x, y=row.coord_y, carga=row.pedidos) for _, row in df_pedidos.iterrows() if row.pedidos != 0}
         return dict_pedidos
     
-    def __str__():
-        pass
+    def __str__(self):
+        self._set_results()
+        return f"--Ruteo--\nCarga Total: {self.carga_total}tn\nCosto Camiones: {self.costo_camiones}$\nCosto Oportunidad: {self.costo_no_asignados}$ \nCosto Total: {self.costo_total}$ \nCosto Total por tn: {self.costo_total_tn}$/tn \nAhorro: {self.ahorro}%"
 
-    def __repr__():
-        pass
+    def __repr__(self):
+        self._set_results()
+        return f"--Ruteo--\nCarga Total: {self.carga_total}tn\nCosto Camiones: {self.costo_camiones}$\nCosto Oportunidad: {self.costo_no_asignados}$ \nCosto Total: {self.costo_total}$ \nCosto Total por tn: {self.costo_total_tn}$/tn \nAhorro: {self.ahorro}%"
     
     def get_ix_camiones(self):
         """
@@ -334,7 +337,7 @@ class Ruteo(object):
         self.costo_total_tn = round(self.costo_total/self.carga_total, 2)
         
     def _set_ahorro(self):
-        self.ahorro = round((self.costo_total_tn - self.presupuesto)/self.presupuesto, 4)
+        self.ahorro = round(((self.costo_total_tn - self.presupuesto)/self.presupuesto)*100, 2)
 
     def _set_results(self):
         self._set_carga_total()
@@ -344,12 +347,20 @@ class Ruteo(object):
         self._set_costo_total_tn()
         self._set_ahorro()
         
-    def get_results(self):
+    def summary(self):
         self._set_results()
-        print("--Resultados--")
-        print(f"Carga Total {self.carga_total} tn")
-        print(f"Costo Camiones {self.costo_camiones} $")
-        print(f"Costo Oportunidad {self.costo_no_asignados} $")
-        print(f"Costo Total {self.costo_total} $")
-        print(f"Costo Total por tn {self.costo_total_tn} $")
-        print(f"Ahorro {self.ahorro*100}%")
+        pass
+        
+    def detail(self):
+        pass
+        
+        
+# def get_results(self):
+#     self._set_results()
+#     print("--Resultados--")
+#     print(f"Carga Total {self.carga_total} tn")
+#     print(f"Costo Camiones {self.costo_camiones} $")
+#     print(f"Costo Oportunidad {self.costo_no_asignados} $")
+#     print(f"Costo Total {self.costo_total} $")
+#     print(f"Costo Total por tn {self.costo_total_tn} $")
+#     print(f"Ahorro {self.ahorro*100}%")
