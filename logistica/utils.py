@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 
 def preparar_df_pedidos(df_pedidos, pedido):
     """
@@ -16,3 +17,8 @@ def preparar_df_pedidos(df_pedidos, pedido):
                  .rename({pedido:"pedidos"}, axis=1))
 
     return df_pedido
+
+def load_inputs(sheet) -> pd.DataFrame:
+    module_path: Path = Path(__file__)
+    file_path: Path = (module_path / "../../data/inputs/data_inputs.xlsx").resolve()
+    return pd.read_excel(file_path, sheet_name=sheet)
