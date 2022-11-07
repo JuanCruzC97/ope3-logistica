@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import random
 from .componentes import Camion
 from .componentes import Pedido
@@ -347,13 +348,47 @@ class Ruteo(object):
         self._set_costo_total_tn()
         self._set_ahorro()
         
-    def summary(self):
+    def summary_camiones(self, ):
         self._set_results()
-        pass
         
-    def detail(self):
-        pass
+        pedidos = []
+        params = []
+        max_peds = 0
+
+        for camion in self.get_camiones():
+            n_peds = len(camion.get_ix_pedidos())
+            pedidos.append(camion.get_ix_pedidos())
+            params.append([camion.get_costo(), camion.get_carga_total()])
+            
+            if n_peds > max_peds:
+                max_peds = n_peds
+            
+        cols = [f"Cliente {i}" for i in range(1, max_peds+1)]
+        ids = [f"Camion {ix}" for ix in self.get_ix_camiones()]
+            
+        df = pd.DataFrame(pedidos, columns=cols, index=ids)
+        df[["Costo", "Carga"]] = params
+        df["Costo_tn"] = np.round(df.Costo/df.Carga, 2)
+        df.loc["Costo Oportunidad"] = ["", "", "", self.costo_no_asignados, sum([pedido.carga for pedido in self.get_pedidos() if not pedido.asignado]), ""]
+        df.loc["Total"] = ["", "", "", self.costo_total, self.carga_total, self.costo_total_tn]
+        df["Ahorro"] = [round((costo - self.presupuesto)/self.presupuesto*100, 2) if costo != "" else "" for costo in df.Costo_tn]
         
+        return df
+        
+    def summary_pedidos(self):
+        self._set_results()
+        
+        data_pedidos = []
+        for pedido in self.get_pedidos():
+            data_pedidos.append([pedido.carga, pedido.asignado, pedido.camion_ix])
+
+        cols = ["Carga", "Asignado", "Camion"]
+        ids = [f"Pedido {ix}" for ix in self.get_ix_pedidos()]
+
+        df = pd.DataFrame(data_pedidos, columns=cols, index=ids)
+        
+        return df
+                
         
 # def get_results(self):
 #     self._set_results()
