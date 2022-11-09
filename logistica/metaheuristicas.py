@@ -89,6 +89,7 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
     end = time.time()
     solution_history["time"] = end-start
     solution_history["random_state"] = random_state
+    solution_history["iters"] = len(solution_history["actual_sol"])
     
     return (best_solution, solution_history)
 
@@ -124,39 +125,39 @@ def make_history_plots(history):
         df_history = history
     
     fig1 = px.line(df_history,
-               x=df_history.index,
-               y=["new_sol", "actual_sol"],
-               color_discrete_map={"new_sol":"#4e68c7", "actual_sol":"#db8344"})
+                   x=df_history.index,
+                   y=["new_sol", "actual_sol"],
+                   color_discrete_map={"new_sol":"#4e68c7", "actual_sol":"#db8344"})
 
     fig2 = px.line(df_history,
-                x=df_history.index,
-                y=["delta", "p"],
-                color_discrete_map={"delta":"#4e68c7", "p":"#d43a22"})
+                   x=df_history.index,
+                   y=["delta", "p"],
+                   color_discrete_map={"delta":"#4e68c7", "p":"#d43a22"})
 
     fig3 = px.line(df_history,
-                x=df_history.index,
-                y=["temp"],
-                color_discrete_map={"temp":"#4e68c7"})
+                   x=df_history.index,
+                   y=["temp"],
+                   color_discrete_map={"temp":"#4e68c7"})
 
     fig4 = px.line(df_history,
-                x=df_history.index,
-                y=["best_sol"],
-                color_discrete_map={"best_sol":"#22a7d4"})
+                   x=df_history.index,
+                   y=["best_sol"],
+                   color_discrete_map={"best_sol":"#22a7d4"})
     
     fig = make_subplots(rows=2, cols=2,
-                    column_widths=[0.5, 0.5],
-                    row_heights=[0.5, 0.5],
-                    subplot_titles=['Actual y Nueva Solución', 
-                                    'Temperatura', 
-                                    'Delta y Probabilidad de Cambio', 
-                                    'Mejor Solución'],
-                    shared_xaxes=True)
+                        column_widths=[0.5, 0.5],
+                        row_heights=[0.5, 0.5],
+                        subplot_titles=['Actual y Nueva Solución', 
+                                        'Temperatura', 
+                                        'Delta y Probabilidad de Cambio', 
+                                        'Mejor Solución'],
+                        shared_xaxes=True)
 
     traces = []
     for i, figure in enumerate([fig1, fig2, fig3, fig4]):
         traces.append([])
-    for trace in range(len(figure["data"])):
-        traces[i].append(figure["data"][trace])
+        for trace in range(len(figure["data"])):
+            traces[i].append(figure["data"][trace])
 
     ubicacion = {0:[1,1], 1:[2,1], 2:[1,2], 3:[2,2]}
 

@@ -349,7 +349,7 @@ class Ruteo(object):
         self._set_costo_total_tn()
         self._set_ahorro()
         
-    def summary_camiones(self, ):
+    def summary_camiones(self):
         self._set_results()
         
         pedidos = []
@@ -390,13 +390,19 @@ class Ruteo(object):
         
         return df
     
-    def summary_ruteo(self):
+    def summary_ruteo(self, time=None, iters=None):
         self._set_results()
         
         metrics = [self.carga_total, self.costo_camiones, self.costo_no_asignados, self.costo_total, self.costo_total_tn, self.ahorro]
         ids = ["Carga Total", "Costo Camiones", "Costo Oportunidad", "Costo Total", "Costo Total por tn", "Ahorro"]
         
         df = pd.DataFrame(metrics, index=ids, columns=[""])
+        
+        if time is not None:
+            df.loc["Tiempo"] = round(time, 2)
+        
+        if iters is not None:
+            df.loc["Iteraciones"] = iters
         
         return df
                 
