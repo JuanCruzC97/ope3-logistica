@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plotly.express as px
 import random
 from .componentes import Camion
 from .componentes import Pedido
@@ -405,6 +406,44 @@ class Ruteo(object):
             df.loc["Iteraciones"] = iters
         
         return df
+    
+    
+    def plot_solution(self):
+        node_ix = []
+        node_x = []
+        node_y = []
+        node_carga = []
+        node_ix_camion = []
+
+        for pedido in self.get_pedidos():
+            node_ix.append(pedido.ix)
+            node_x.append(pedido.x)
+            node_y.append(pedido.y)
+            node_carga.append(pedido.carga)
+            node_ix_camion.append(str(pedido.camion_ix) if pedido.asignado else "No Asignado")
+
+        cat_order = list(set(node_ix_camion))
+        cat_order.sort()
+
+        fig = px.scatter(x=node_x,
+                         y=node_y,
+                         size=node_carga,
+                         color=node_ix_camion,
+                         text=node_ix,
+                         category_orders={"color":cat_order},
+                         color_discrete_sequence=px.colors.qualitative.Prism,
+                         height=600,
+                         width=700,
+                         template="plotly_white")
+        
+        # fig.update_traces(hovertemplate=
+        #               "<b>%{text}</b><br><br>" +
+        #               "GDP per Capita: %{x:$,.0f}<br>" +
+        #               "Life Expectation: %{y:.0%}<br>" +
+        #               "Population: %{marker.size:,}" +
+        #               "<extra></extra>")
+
+        fig.show()
                 
         
 # def get_results(self):

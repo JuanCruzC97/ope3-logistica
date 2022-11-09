@@ -166,13 +166,14 @@ def make_history_plots(history):
             fig.append_trace(trace, row=ubicacion[i][0], col=ubicacion[i][1])
 
     fig.update_layout(template="plotly_white",
-                    height=800,
-                    width=1600,
-                    legend=dict(orientation="h",
-                                yanchor="bottom",
-                                y=1.08,
-                                xanchor="center",
-                                x=0.5))
+                      height=800,
+                      width=1600,
+                      legend=dict(orientation="h",
+                                  yanchor="bottom",
+                                  y=1.08,
+                                  xanchor="center",
+                                  x=0.5),
+                      hovermode="x unified")
 
     fig.show()
 
