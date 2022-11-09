@@ -160,7 +160,7 @@ class Ruteo(object):
                 camion.add_pedido_checked(pedido)
                 
                 
-    def _get_solucion_inicial_random(self, random_state):
+    def _get_solucion_inicial_random(self, random_state=None):
         """
         Genera una solución con aleatoriedad.
             1. Mezcla los ix de pedidos de manera aleatoria.
@@ -171,7 +171,8 @@ class Ruteo(object):
         Prueba introducir todos los pedidos en todos los camiones en orden aleatorio.
         """
         # Definimos la semilla.
-        random.seed(random_state)
+        if random_state is not None:
+            random.seed(random_state)
         # Identificadores aleatorios de pedidos.
         ix_pedidos_rnd = random.sample(self.get_ix_pedidos(), self.count_pedidos())
         
@@ -386,6 +387,16 @@ class Ruteo(object):
         ids = [f"Pedido {ix}" for ix in self.get_ix_pedidos()]
 
         df = pd.DataFrame(data_pedidos, columns=cols, index=ids)
+        
+        return df
+    
+    def summary_ruteo(self):
+        self._set_results()
+        
+        metrics = [self.carga_total, self.costo_camiones, self.costo_no_asignados, self.costo_total, self.costo_total_tn, self.ahorro]
+        ids = ["Carga Total", "Costo Camiones", "Costo Oportunidad", "Costo Total", "Costo Total por tn", "Ahorro"]
+        
+        df = pd.DataFrame(metrics, index=ids, columns=[""])
         
         return df
                 

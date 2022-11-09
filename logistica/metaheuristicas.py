@@ -1,14 +1,17 @@
+import pandas as pd
+import numpy as np
+from plotly.subplots import make_subplots
+import plotly.express as px
+from tqdm import tqdm
 import time
 import copy
 import math
 import random
-import numpy as np
-from tqdm import tqdm
-from plotly.subplots import make_subplots
-import plotly.express as px
 
 
-def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, random_state=1):
+
+
+def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, random_state=None):
     """
     Esta función permite llevar a cabo la metaheurística de recocido simulado, definiendo número de iteraciones
     en cada temperatura y factor k de reducción de temperatura.
@@ -28,7 +31,8 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
                - Un diccionario que contiene la sucesión de soluciones evaluadas y la sucesión de mejores soluciones. Además guarda el tiempo de ejecución.
     """
     # Definimos la semilla de números aleatorios.
-    random.seed(random_state)
+    if random_state is not None:
+        random.seed(random_state)
     # Medidos el tiempo de comienzo.
     start = time.time()
     
@@ -98,12 +102,78 @@ def non_linear_temps(t_inicial, k):
     return temps
 
 
-def get_history_df():
-    pass
+def get_history_df(history):
+    df_history = pd.DataFrame({"temp":history["temp"],
+                           "actual_sol":history["actual_sol"],
+                           "new_sol":history["new_sol"]})
+
+    df_history = (df_history
+                .assign(best_sol = lambda df_: df_.actual_sol.cummin(),
+                        delta = lambda df_: df_.actual_sol - df_.new_sol,
+                        p = lambda df_: np.exp(df_.delta/df_.temp))
+                .assign(p = lambda df_: np.round(np.where(df_.p > 1, 1, df_.p) ,2)))
+
+    return df_history
 
 
-def make_optimization_plots():
-    pass
+def make_history_plots(history):
+    
+    if isinstance(history, dict):
+        df_history = get_history_df(history)
+    else:
+        df_history = history
+    
+    fig1 = px.line(df_history,
+               x=df_history.index,
+               y=["new_sol", "actual_sol"],
+               color_discrete_map={"new_sol":"#4e68c7", "actual_sol":"#db8344"})
+
+    fig2 = px.line(df_history,
+                x=df_history.index,
+                y=["delta", "p"],
+                color_discrete_map={"delta":"#4e68c7", "p":"#d43a22"})
+
+    fig3 = px.line(df_history,
+                x=df_history.index,
+                y=["temp"],
+                color_discrete_map={"temp":"#4e68c7"})
+
+    fig4 = px.line(df_history,
+                x=df_history.index,
+                y=["best_sol"],
+                color_discrete_map={"best_sol":"#22a7d4"})
+    
+    fig = make_subplots(rows=2, cols=2,
+                    column_widths=[0.5, 0.5],
+                    row_heights=[0.5, 0.5],
+                    subplot_titles=['Actual y Nueva Solución', 
+                                    'Temperatura', 
+                                    'Delta y Probabilidad de Cambio', 
+                                    'Mejor Solución'],
+                    shared_xaxes=True)
+
+    traces = []
+    for i, figure in enumerate([fig1, fig2, fig3, fig4]):
+        traces.append([])
+    for trace in range(len(figure["data"])):
+        traces[i].append(figure["data"][trace])
+
+    ubicacion = {0:[1,1], 1:[2,1], 2:[1,2], 3:[2,2]}
+
+    for i in range(4):
+        for trace in traces[i]:
+            fig.append_trace(trace, row=ubicacion[i][0], col=ubicacion[i][1])
+
+    fig.update_layout(template="plotly_white",
+                    height=800,
+                    width=1600,
+                    legend=dict(orientation="h",
+                                yanchor="bottom",
+                                y=1.08,
+                                xanchor="center",
+                                x=0.5))
+
+    fig.show()
 
 
 
