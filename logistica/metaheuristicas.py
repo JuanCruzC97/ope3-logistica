@@ -173,7 +173,7 @@ def make_history_plots(history):
                                   y=1.08,
                                   xanchor="center",
                                   x=0.5),
-                      hovermode="x unified")
+                      hovermode="x")
 
     fig.show()
 
