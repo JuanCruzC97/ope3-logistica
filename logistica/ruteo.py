@@ -444,6 +444,13 @@ class Ruteo(object):
         #               "<extra></extra>")
 
         fig.show()
+        
+        
+    def save_results(self, path):
+        with pd.ExcelWriter(path) as writer:
+            self.summary_ruteo().to_excel(writer, sheet_name="ruteo")
+            self.summary_camiones().to_excel(writer, sheet_name="camiones")
+            self.summary_pedidos().to_excel(writer, sheet_name="pedidos")
                 
         
 # def get_results(self):
