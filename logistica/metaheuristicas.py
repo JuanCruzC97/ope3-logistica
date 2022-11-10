@@ -11,7 +11,7 @@ import random
 
 
 
-def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, random_state=None):
+def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", max_time=None, prob=1, random_state=None):
     """
     Esta función permite llevar a cabo la metaheurística de recocido simulado, definiendo número de iteraciones
     en cada temperatura y factor k de reducción de temperatura.
@@ -20,7 +20,7 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
         ruteo_inicial (Ruteo): Instancia de Ruteo con una solución incial generada.
         t_inicial (int or float): Temperatura inicial del proceso.
         t_final (int or float): Temperatura final del proceso.
-        k (int or float): Factor de reducción de temperatura (en unidades de temperatura).
+        k (int): Factor que define el número de temperaturas evaluadas en el intervalo definido.
         iters (int): Número de iteraciones para una temperatura.
         prob (int, optional): Argumento opcional en la generación de vecinos. Defaults to 1.
         random_state (int, optional): Argumento opcional que permite elegir la semilla de generación de valores pseudoaleatorios. Defaults to 1.
@@ -84,6 +84,10 @@ def sa(ruteo_inicial, t_inicial, t_final, k, iters, temp_mode="linear", prob=1, 
                 # Actualizamos la mejor solución encontrada.
                 best_solution = copy.deepcopy(actual_solution)
                 solution_history["best_sol"].append(best_solution.costo_total_tn)
+        
+        if max_time is not None:
+            if max_time < (time.time() - start):
+                break
             
     # Terminamos de medir el tiempo de ejecución y guardamos los resultados.
     end = time.time()
