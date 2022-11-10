@@ -16,8 +16,14 @@ Esta tabla tiene que tener las 4 columnas mostradas, con el ID de cada camión y
 
 ![tabla pedidos](assets/../../../assets/inputs2.png)
 
-## parametros
+## parametros_ruteo
 
 Esta tabla incorpora algunos parámetros del como el valor de los pedidos no asignados en el **costo_oportunidad** y el **presupuesto** contra el que se calcula el ahorro.
 
 ![tabla pedidos](assets/../../../assets/inputs3.png)
+
+## parametros_mh
+
+Esta tabla incorpora los parámetros de la optimización por recocido simulado.
+
+![tabla pedidos](assets/../../../assets/inputs4.png)
