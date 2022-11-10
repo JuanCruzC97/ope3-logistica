@@ -371,8 +371,8 @@ class Ruteo(object):
         df = pd.DataFrame(pedidos, columns=cols, index=ids)
         df[["Costo", "Carga"]] = params
         df["Costo_tn"] = np.round(df.Costo/df.Carga, 2)
-        df.loc["Costo Oportunidad"] = ["", "", "", self.costo_no_asignados, sum([pedido.carga for pedido in self.get_pedidos() if not pedido.asignado]), ""]
-        df.loc["Total"] = ["", "", "", self.costo_total, self.carga_total, self.costo_total_tn]
+        df.loc["Costo Oportunidad"] = [""]*max_peds + [self.costo_no_asignados, sum([pedido.carga for pedido in self.get_pedidos() if not pedido.asignado]), ""]
+        df.loc["Total"] = [""]*max_peds + [self.costo_total, self.carga_total, self.costo_total_tn]
         df["Ahorro"] = [round((costo - self.presupuesto)/self.presupuesto*100, 2) if costo != "" else "" for costo in df.Costo_tn]
         
         return df
