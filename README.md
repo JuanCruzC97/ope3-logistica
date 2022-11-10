@@ -14,8 +14,8 @@
   * `utils.py`: Contiene functiones varias.
 
 * `notebooks`: Contiene notebooks diferentes con distintas modalidades de ejecución del programa.
-  * `...`
-  * `...`
+  * `optimizacion_diaria_directa.ipynb`: Permite correr la optimización para todos los pedidos de 1 día, de manera directa (sin los detalles y extensión del notebook `optimizacion_diaria.ipynb`).
+  * `optimizacion_multiple`: Permite correr la optimización para todos los pedidos en múltiples días de manera directa. Genera una solución optimizada para cada columna con el nombre `pedido` de la hoja `pedidos` del archivo de inputs.
   * `pruebas`: pruebas varias de código.
 
 * `optimizacion_diaria.ipynb`: Notebook que permite correr la optimización de todos los pedidos de 1 día a partir de los datos en `data/inputs` y en detalle.
