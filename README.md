@@ -24,3 +24,10 @@
 
     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JuanCruzC97/ope3-logistica/blob/main/optimizacion_diaria.ipynb)
 
+
+## Tutoriales
+
+Tutorial de uso del Notebook principal. [Tutorial 1](https://drive.google.com/file/d/13b59xNI7ubxzMq6DMgxSyAlGvGsR9Wxe/view?usp=sharing)
+
+Tutorial de uso de Notebooks secundarios. [Tutorial 2](https://drive.google.com/file/d/1LdPL5AHFC7uDP4sdfZ9SFYszI6qeMii4/view?usp=sharing)
+

@@ -2,7 +2,7 @@
 
 El modelo requiere el siguiente formato en el excel para definir los datos de pedidos y camiones. Además permite definir desde este excel algunos parámetros del ruteo como el costo de oportunidad y el presupuesto.
 
-El excel debe contener las siguientes 3 hojas con los siguientes nombres:
+El excel debe contener las siguientes 4 hojas con los siguientes nombres:
 
 ## pedidos
 
